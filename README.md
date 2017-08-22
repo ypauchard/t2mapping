@@ -2,7 +2,7 @@
 ITK-based T2 mapping
 
 ## description
-This project used the ITK-based T2 mapping code from:
+This project uses ITK-based T2 mapping code from:
 
 Bigler, D., M. Meadowcroft, X. Sun, J. Vesek, A. Dresner, M. Smith, and Q. Yang. “MR Parameter Map Suite: ITK Classes for Calculating Magnetic Resonance T2 and T1 Parameter Maps,” 2008.
 
@@ -32,4 +32,4 @@ make
 Tested with InsightToolkit-4.8.2 (ITK) and CMake 3.8.2 on MacOSx ElCapitan
 
 ## license
-BSD 3-Clause License (see LICENSE.txt)
+BSD 3-Clause License (see LICENSE)
