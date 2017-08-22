@@ -18,6 +18,12 @@ algorithm:
 * 1: NON_LINEAR least-squares fit of S = A * exp(-t/T2)
 * 2: NON_LINEAR_WITH_CONSTANT least-squares fit S = A* exp(-t/T2) + C
 
+Outputs produced:
+* `*_t2.mha`: 3D image with voxel values equal T2 [s]
+* `*_A.mha`: 3D image with voxel values equal to magnitude A
+* `*_C.mha`: 3D image with voxel values equal to constant C
+* `*_R2.mha`: 3D image with voxel values equal to r-squared of curve fit
+
 Example:
 `./t2mapping result 0 image1.mha 12.0 image2.mha 56.0 image3.mha 92.0`
 
