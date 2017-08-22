@@ -1,0 +1,8 @@
+# data directory
+data/
+
+# build directory
+build/
+
+# MAC
+.DS_STORE
