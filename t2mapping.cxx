@@ -3,6 +3,7 @@
 #include <fstream>
 //#include "itkNumericTraits.h"
 #include "itkImage.h"
+#include "itkThresholdImageFilter.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkMRT2ParameterMap3DImageFilter.h"
@@ -13,15 +14,15 @@
 
 int main(int argc, char **argv)
 {
-  if( argc < 7 )
+  if( argc < 8 )
   {
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0] << " outBaseName algorithm image1 TE1 image2 TE2 image3 TE3 [image4 TE4] etc.";
+    std::cerr << argv[0] << " outBaseName algorithm threshold image1 TE1 image2 TE2 [image3 TE3] [image4 TE4] etc.";
     std::cerr << " " << std::endl;
     return 1;
   }
 
-//build/t2mapping data/mojo_0033 2 data/mojo_0033_18ms.mha 18.0 data/mojo_0033_45ms.mha 45.0 data/mojo_0033_99ms.mha 99.0 data/mojo_0033_126ms.mha 126.0
+//build/t2mapping data/mojo_0033 2 0 data/mojo_0033_18ms.mha 18.0 data/mojo_0033_45ms.mha 45.0 data/mojo_0033_99ms.mha 99.0 data/mojo_0033_126ms.mha 126.0
 
   std::string outBaseName(argv[1]);
   std::string outputT2Filename = outBaseName + "_t2.mha";
@@ -31,8 +32,13 @@ int main(int argc, char **argv)
 
   int algorithm = atoi( argv[2] );
 
+  float threshold = atof(argv[3]);
+
   typedef itk::Image< float, 4 > ImageType4D;
   typedef itk::Image< float, 3 > ImageType;
+
+  typedef itk::ThresholdImageFilter< ImageType >
+    ThresholdImageFilterType;
 
   typedef itk::MRT2ParameterMap3DImageFilter< ImageType::PixelType >
     MRT2ParameterMap3DImageFilterType;
@@ -50,7 +56,7 @@ int main(int argc, char **argv)
   bool r2Mapping = false;
   //int algorithm = MRT2ParameterMap3DImageFilterType::NON_LINEAR_WITH_CONSTANT;
   double maxT2Time = 10.0f;
-  //short threshold = 0;
+
 
 
 
@@ -84,8 +90,9 @@ int main(int argc, char **argv)
 
 
     //foreach image
-    for(int i = 3; i<argc-1; i += 2 )
+    for(int i = 4; i<argc-1; i += 2 )
     {
+      std::cout << "Reading " << argv[i] << std::endl;
       ReaderType::Pointer imageIO = ReaderType::New();
       imageIO->SetFileName(argv[i]);
       try
@@ -98,8 +105,25 @@ int main(int argc, char **argv)
         std::cerr << " : "  << err.GetDescription();
         return 1;
         }
-        t2Map->AddMREchoImage(atoi(argv[i+1])/1000.0f, //convert to seconds
-        imageIO->GetOutput());
+
+        if (threshold > 0)
+        {
+          // Threshold the image.
+          std::cout << "Applying threshold " << threshold << std::endl;
+          ThresholdImageFilterType::Pointer imageThreshold = ThresholdImageFilterType::New();
+          imageThreshold->SetOutsideValue(0.0f);
+          imageThreshold->SetInput(imageIO->GetOutput());
+          imageThreshold->ThresholdBelow(threshold);
+          imageThreshold->Update();
+
+          t2Map->AddMREchoImage(atoi(argv[i+1])/1000.0f, //convert to seconds
+          imageThreshold->GetOutput());
+        }else
+        {
+          t2Map->AddMREchoImage(atoi(argv[i+1])/1000.0f, //convert to seconds
+          imageIO->GetOutput());
+        }
+
     }
 
     std::cout<< t2Map <<std::endl;
