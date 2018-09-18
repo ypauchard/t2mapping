@@ -26,7 +26,7 @@ threshold:
 * Use threshold=0 if you do not want thresholding
 
 Outputs produced:
-* `*_t2.mha`: 3D image with voxel values equal T2 [s]
+* `*_t2.mha`: 3D image with voxel values equal T2 [ms]
 * `*_A.mha`: 3D image with voxel values equal to magnitude A
 * `*_C.mha`: 3D image with voxel values equal to constant C
 * `*_R2.mha`: 3D image with voxel values equal to r-squared of curve fit

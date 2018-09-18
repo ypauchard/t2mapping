@@ -56,7 +56,7 @@ namespace itk
  *
  * \par Outputs
  * The output image is a vector image containing 4 values:
- * The first component of the output will be the T2 time in seconds (R2 in Hz),
+ * The first component of the output will be the T2 time in milli-seconds (R2 in kHz),
  * the second component will be the constant A as shown in the function below,
  * and the fourth component will be the r-squared value from the curve fitting.
  * The third component will vary depending on the type of T2 fitting selected.
@@ -136,10 +136,10 @@ public:
   /** Container to hold echo times of the 'n' MR echo image measurements */
   typedef VectorContainer< unsigned int,EchoTimeType >  EchoTimeContainerType;
 
-  /** Set method to add an echo time (in seconds) and its corresponding image. */
+  /** Set method to add an echo time (in milli-seconds) and its corresponding image. */
   void AddMREchoImage( EchoTimeType, const MREchoImageType *image);
 
-  /** Another set method to add an echo time (in seconds) and its corresponding
+  /** Another set method to add an echo time (in milli-seconds) and its corresponding
    * image. The image here is a VectorImage. The user is expected to pass the
    * echo times in a container. The ith element of the container corresponds
    * to the echo time of the ith component image of the VectorImage. */

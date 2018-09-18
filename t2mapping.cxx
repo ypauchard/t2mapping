@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 
   bool r2Mapping = false;
   //int algorithm = MRT2ParameterMap3DImageFilterType::NON_LINEAR_WITH_CONSTANT;
-  double maxT2Time = 10.0f;
+  double maxT2Time = 1000.0f; //in milli-seconds
 
 
 
@@ -116,11 +116,11 @@ int main(int argc, char **argv)
           imageThreshold->ThresholdBelow(threshold);
           imageThreshold->Update();
 
-          t2Map->AddMREchoImage(atoi(argv[i+1])/1000.0f, //convert to seconds
+          t2Map->AddMREchoImage(atoi(argv[i+1]), //time in milli-seconds
           imageThreshold->GetOutput());
         }else
         {
-          t2Map->AddMREchoImage(atoi(argv[i+1])/1000.0f, //convert to seconds
+          t2Map->AddMREchoImage(atoi(argv[i+1]), //time in milli-seconds
           imageIO->GetOutput());
         }
 
